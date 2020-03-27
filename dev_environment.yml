@@ -1,0 +1,48 @@
+# An example for creating a Ubuntu container and install python
+- hosts: developement
+  remote_user: root
+  tasks:
+    - name: Install some dependencies
+      apt:
+              pkg:
+                      - vim
+                      - tmux
+                      - clang
+                      - cmake
+                      - gdb
+                      - valgrind
+                      - git
+                      - fish
+                      - curl
+                      - unzip
+                      - tar
+                      - g++
+                      - gcc
+
+
+    - name: Set shell
+      command: chsh -s /usr/bin/fish
+        
+    - name: Create config folder for fish
+      file:
+              path: /root/.config/fish
+              state: directory
+
+    - name: Copy shell config
+      copy:
+              src: ./config.fish
+              dest: /root/.config/fish/config.fish
+              owner: root
+              group: root
+              mode: '0777'
+
+   
+    - name: Clone vcpkg
+      git:
+              repo: https://github.com/microsoft/vcpkg.git
+              dest: /root/vcpkg
+
+    - name: Install vcpkg
+      command: bash /root/vcpkg/bootstrap-vcpkg.sh
+
+    
