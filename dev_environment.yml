@@ -1,4 +1,5 @@
-- hosts: developement
+- hosts: 
+        - developement
   remote_user: root
   tasks:
     - name: Install some dependencies
@@ -7,8 +8,6 @@
                       - python3
                       - vim
                       - tmux
-                      - clang
-                      - cmake
                       - gdb
                       - valgrind
                       - git
@@ -16,8 +15,14 @@
                       - curl
                       - unzip
                       - tar
+                      - snapd
                       - g++
                       - gcc
+                        
+    - name: Install cmake
+      snap:
+              name: cmake
+              classic: yes
 
     - name: Set shell
       command: chsh -s /usr/bin/fish

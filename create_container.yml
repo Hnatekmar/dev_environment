@@ -1,0 +1,25 @@
+# Create developement container
+- hosts: localhost
+  connection: local
+  tasks:
+          - name: Create a started container
+            lxd_container:
+                    name: dev
+                    state: started
+                    source:
+                            type: image
+                            mode: pull
+                            server: https://images.linuxcontainers.org
+                            protocol: simplestreams
+                            alias: ubuntu/eoan
+                            profiles: ["default"]
+                    wait_for_ipv4_addresses: true
+                    timeout: 600
+
+          - name: Insert record into inventory
+            become: yes
+            blockinfile:
+                    path: /etc/ansible/hosts
+                    block: |
+                            [developement]
+                            dev ansible_connection=lxd
